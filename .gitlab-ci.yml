@@ -1,0 +1,80 @@
+include:
+  - template: Terraform/Base.gitlab-ci.yml  
+  - template: Jobs/SAST-IaC.gitlab-ci.yml   
+    
+# Default output file for Terraform plan
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  GITLAB_USERNAME: gitlab-ci-token
+  GITLAB_PASSWORD: $CI_JOB_TOKEN
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  AWS_DEFAULT_REGION: ap-southeast-1
+  GITLAB_TOKEN: $CI_JOB_TOKEN
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - .terraform
+
+stages:
+  - validate
+  - test
+
+##################################
+#### ------------------------ ####
+####      TERRAFORM JOBS      ####
+####         (Linting)        ####
+#### ------------------------ ####
+##################################
+
+## VALIDATE
+fmt:
+  extends: .terraform:fmt
+  image: registry.gitlab.com/gitlab-org/terraform-images/releases/1.5:v1.5.0
+  only:
+    changes:
+      - ".gitlab-ci.yml"
+      - "*.tf"
+      - "**/*.tf"
+  except:
+    refs: 
+    - main
+    - tags
+  needs: []
+
+validate:
+  extends: .terraform:validate
+  image: registry.gitlab.com/gitlab-org/terraform-images/releases/1.5:v1.5.0
+  only:
+    changes:
+      - ".gitlab-ci.yml"
+      - "*.tf"
+      - "**/*.tf"
+  except:
+    refs: 
+    - main
+    - tags
+  needs: []
+
+tfsec:
+  image: 
+    name: wesleydeanflexion/tfsec
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/go/bin'
+  stage: test
+  only:
+    changes:
+      - ".gitlab-ci.yml"
+      - "*.tf"
+      - "**/*.tf"
+  before_script:
+    - tfsec -v
+  script: tfsec --config-file .tfsec.yml . -f json | tee gl-sast-report.json
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
