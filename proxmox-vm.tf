@@ -19,6 +19,7 @@ resource "proxmox_vm_qemu" "vm" {
   ## This provisioning method is therefore ran ** before** provision blocks.
   ## When using preprovision, there are three os_type options: ubuntu, centos or cloud-init.
   os_type = "cloud-init"
+  cloudinit_cdrom_storage = "ide0"
   ciuser  = coalesce(each.value.os, var.proxmox_defaults.os)
 
   ## Resource Configuration
@@ -27,20 +28,22 @@ resource "proxmox_vm_qemu" "vm" {
   memory  = coalesce(each.value.memory, var.proxmox_defaults.memory)
   hotplug = coalesce(each.value.hotplug, var.proxmox_defaults.hotplug)
 
-
-  boot = "c"
+  bios = coalesce(each.value.bios, var.proxmox_defaults.bios, "seabios")
+  # boot = "order=scsi0;ide2;net0;ide0"
 
   sshkeys = coalesce(each.value.sshkeys, var.proxmox_ssh)
 
   scsihw = coalesce(each.value.scsihw, "virtio-scsi-single")
 
   # Setup the disk
-  dynamic "disk" {
-    for_each = coalesce(each.value.disk_configuration, var.proxmox_defaults.disk_configuration)
-    content {
-      size    = each.value.size
-      type    = each.value.type
-      storage = each.value.storage
+  disks { 
+    scsi {
+      scsi0 {
+        disk {
+          storage = "at-hk-storage-1"
+          size    = 40
+        }
+      }
     }
   }
 

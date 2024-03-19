@@ -15,6 +15,7 @@ variable "proxmox_vms" {
     hotplug        = optional(string)
     scsihw         = optional(string)
     sshkeys        = optional(string)
+    bios           = optional(string)
     network_configuration = list(object({
       model  = string
       bridge = string
@@ -37,17 +38,20 @@ variable "proxmox_defaults" {
     memory        = number
     hotplug       = string
     proxmox_clone = string
-    disk_configuration = list(object({
-      type    = string
-      storage = string
-      size    = string
-    }))
+    disk_configuration = object({
+      scsi    = optional(map(object({
+        type    = string
+        storage = string
+        size    = string
+      })))
+    })
     network_configuration = list(object({
       model  = string
       bridge = string
     }))
     os          = string
     target_node = string
+    bios = string
   })
   default = {
     cores         = 1
@@ -55,13 +59,15 @@ variable "proxmox_defaults" {
     memory        = 2048
     hotplug       = "network,disk,cpu,memory"
     proxmox_clone = "debian-12-infra-compute-template"
-    disk_configuration = [
-      {
-        type    = "virtio"
-        storage = "local-btrfs"
-        size    = "50G"
+    disk_configuration = {
+      scsi = {
+        scsi0 = {
+          type = "virtio"
+          storage = "at-hk-compute-1"
+          size = "40G"
+        }
       }
-    ]
+    }
     network_configuration = [
       {
         model  = "virtio"
@@ -70,6 +76,7 @@ variable "proxmox_defaults" {
     ]
     os          = "debian"
     target_node = "compute-1"
+    bios = "seabios"
   }
 }
 
