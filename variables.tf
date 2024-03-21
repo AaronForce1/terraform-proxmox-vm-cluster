@@ -15,6 +15,7 @@ variable "proxmox_vms" {
     hotplug        = optional(string)
     scsihw         = optional(string)
     sshkeys        = optional(string)
+    bios           = optional(string)
     network_configuration = list(object({
       model  = string
       bridge = string
@@ -48,6 +49,7 @@ variable "proxmox_defaults" {
     }))
     os          = string
     target_node = string
+    bios        = string
   })
   default = {
     cores         = 1
@@ -70,6 +72,7 @@ variable "proxmox_defaults" {
     ]
     os          = "debian"
     target_node = "compute-1"
+    bios = "seabios"
   }
 }
 

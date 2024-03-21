@@ -29,6 +29,7 @@ resource "proxmox_vm_qemu" "vm" {
 
 
   boot = "c"
+  bios = coalesce(each.value.bios, var.proxmox_defaults.bios, "seabios")
 
   sshkeys = coalesce(each.value.sshkeys, var.proxmox_ssh)
 
