@@ -8,3 +8,34 @@ repos:
     - id: terraform_validate
     - id: terraform_tflint
     - id: terraform_tfsec
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+    - id: check-json
+    - id: check-merge-conflict
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-yaml
+    - id: check-added-large-files
+    - id: pretty-format-json
+      args:
+        - --autofix
+    - id: detect-aws-credentials
+      args:
+        - --allow-missing-credentials
+    - id: detect-private-key
+- repo: https://github.com/Lucas-C/pre-commit-hooks
+  rev: v1.5.1
+  hooks:
+    - id: forbid-tabs
+      exclude_types: [python, javascript, dtd, markdown, makefile, xml]
+      exclude: binary|\.bin
+- repo: https://github.com/jameswoolfenden/pre-commit-shell
+  rev: 0.0.2
+  hooks:
+    - id: shell-lint
+      exclude: template|\.template$
+- repo: https://github.com/igorshubovych/markdownlint-cli
+  rev: v0.35.0
+  hooks:
+    - id: markdownlint
