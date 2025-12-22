@@ -19,6 +19,7 @@ variable "proxmox_vms" {
       model  = string
       bridge = string
     }))
+    disks = any
     disk_configuration = list(object({
       type    = string
       storage = string
