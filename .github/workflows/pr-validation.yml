@@ -30,30 +30,29 @@ jobs:
         with:
           go-version: 'stable'
 
-      - name: Add Go bin to PATH
-        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-
-      - name: Install TFLint
-        uses: terraform-linters/setup-tflint@v4
-
-      - name: Install TFSec
-        run: go install github.com/aquasecurity/tfsec/cmd/tfsec@latest
-
-      - name: Install terraform-docs
-        run: go install github.com/terraform-docs/terraform-docs@latest
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install shellcheck
+      - name: Install TFLint
+        uses: terraform-linters/setup-tflint@v4
+
+      - name: Install dependencies
         run: |
+          # Add Go bin to PATH
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+          
+          # Install Go-based tools
+          go install github.com/aquasecurity/tfsec/cmd/tfsec@latest
+          go install github.com/terraform-docs/terraform-docs@latest
+          
+          # Install shellcheck
           sudo apt-get update
           sudo apt-get install -y shellcheck
-
-      - name: Install markdownlint-cli
-        run: npm install -g markdownlint-cli
+          
+          # Install markdownlint-cli
+          npm install -g markdownlint-cli
 
       - name: Cache pre-commit
         uses: actions/cache@v4
