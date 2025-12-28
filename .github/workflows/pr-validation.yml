@@ -21,25 +21,24 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: '~> 1.5'
+          terraform_version: '1.5'
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: 'stable'
 
+      - name: Add Go bin to PATH
+        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
       - name: Install TFLint
-        run: |
-          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+        uses: terraform-linters/setup-tflint@v4
 
       - name: Install TFSec
-        run: |
-          go install github.com/aquasecurity/tfsec/cmd/tfsec@latest
-          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+        run: go install github.com/aquasecurity/tfsec/cmd/tfsec@latest
 
       - name: Install terraform-docs
-        run: |
-          go install github.com/terraform-docs/terraform-docs@latest
+        run: go install github.com/terraform-docs/terraform-docs@latest
 
       - name: Install shellcheck
         run: |
