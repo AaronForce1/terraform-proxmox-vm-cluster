@@ -47,9 +47,9 @@ resource "proxmox_vm_qemu" "vm" {
   dynamic "network" {
     for_each = toset(coalesce(each.value.network_configuration, var.proxmox_base_settings.network_configuration))
     content {
-      id      = network.value.id
-      model   = network.value.model
-      bridge  = network.value.bridge
+      id     = network.value.id
+      model  = network.value.model
+      bridge = network.value.bridge
     }
   }
 

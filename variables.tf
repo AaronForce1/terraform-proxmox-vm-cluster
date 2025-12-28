@@ -53,22 +53,22 @@ variable "proxmox_base_settings" {
 variable "proxmox_defaults" {
   description = "Core Default Proxmox Configurations for Simplicity of Deployment"
   type = object({
-    cores         = number
-    sockets       = number
-    memory        = number
-    hotplug       = string
-    ostype        = string
-    os            = string
-    bios          = string
+    cores   = number
+    sockets = number
+    memory  = number
+    hotplug = string
+    ostype  = string
+    os      = string
+    bios    = string
   })
   default = {
-    cores         = 2
-    sockets       = 1
-    memory        = 2048
-    hotplug       = "network,disk,cpu"
-    ostype        = "cloud-init"
-    os            = "ubuntu"
-    bios          = "SeaBIOS"
+    cores   = 2
+    sockets = 1
+    memory  = 2048
+    hotplug = "network,disk,cpu"
+    ostype  = "cloud-init"
+    os      = "ubuntu"
+    bios    = "SeaBIOS"
   }
 }
 
