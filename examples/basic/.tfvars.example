@@ -1,0 +1,7 @@
+proxmox_url = "<PROXMOX_URL>/api2/json"
+proxmox_token_id = ""
+proxmox_token = ""
+
+proxmox_target_node = ""
+proxmox_local_storage = "local"
+proxmox_clone_template = "vm-template"
