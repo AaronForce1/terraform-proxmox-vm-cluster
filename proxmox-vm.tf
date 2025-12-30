@@ -15,7 +15,7 @@ resource "proxmox_vm_qemu" "vm" {
 
   name = each.value.name
 
-  ## With preprovision, you can provision a VM directly from the resource block. 
+  ## With preprovision, you can provision a VM directly from the resource block.
   ## This provisioning method is therefore ran ** before** provision blocks.
   ## When using preprovision, there are three os_type options: ubuntu, centos or cloud-init.
   os_type = "cloud-init"

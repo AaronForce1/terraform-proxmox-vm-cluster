@@ -1,7 +1,7 @@
 include:
-  - template: Terraform/Base.gitlab-ci.yml  
-  - template: Jobs/SAST-IaC.gitlab-ci.yml   
-    
+  - template: Terraform/Base.gitlab-ci.yml
+  - template: Jobs/SAST-IaC.gitlab-ci.yml
+
 # Default output file for Terraform plan
 variables:
   DOCKER_DRIVER: overlay2
@@ -41,7 +41,7 @@ fmt:
       - "*.tf"
       - "**/*.tf"
   except:
-    refs: 
+    refs:
     - main
     - tags
   needs: []
@@ -55,13 +55,13 @@ validate:
       - "*.tf"
       - "**/*.tf"
   except:
-    refs: 
+    refs:
     - main
     - tags
   needs: []
 
 tfsec:
-  image: 
+  image:
     name: wesleydeanflexion/tfsec
     entrypoint:
       - '/usr/bin/env'
