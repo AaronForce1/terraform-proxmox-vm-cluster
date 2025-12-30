@@ -39,3 +39,6 @@ repos:
   rev: v0.35.0
   hooks:
     - id: markdownlint
+      args:
+        - --disable
+        - MD033

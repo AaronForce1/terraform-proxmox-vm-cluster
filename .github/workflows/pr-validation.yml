@@ -42,15 +42,15 @@ jobs:
         run: |
           # Add Go bin to PATH
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-          
+
           # Install Go-based tools
           go install github.com/aquasecurity/tfsec/cmd/tfsec@latest
           go install github.com/terraform-docs/terraform-docs@latest
-          
+
           # Install shellcheck
           sudo apt-get update
           sudo apt-get install -y shellcheck
-          
+
           # Install markdownlint-cli
           npm install -g markdownlint-cli
 
