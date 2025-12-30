@@ -19,7 +19,7 @@ Terraform module built to integrate with PROXMOX On-Prem Hypervisor and deploy V
 
 | Name | Version |
 |------|---------|
-| <a name="provider_proxmox"></a> [proxmox](#provider\_proxmox) | 2.9.14 |
+| <a name="provider_proxmox"></a> [proxmox](#provider\_proxmox) | 3.0.2-rc07 |
 
 ## Modules
 
