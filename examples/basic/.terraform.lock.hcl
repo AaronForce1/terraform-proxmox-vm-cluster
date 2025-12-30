@@ -23,7 +23,7 @@ provider "registry.terraform.io/hashicorp/random" {
 
 provider "registry.terraform.io/telmate/proxmox" {
   version     = "3.0.2-rc07"
-  constraints = "3.0.2-rc07"
+  constraints = "~> 2.9, 3.0.2-rc07"
   hashes = [
     "h1:zp5hpQJQ4t4zROSLqdltVpBO+Riy9VugtfFbpyTw1aM=",
     "zh:2ee860cd0a368b3eaa53f4a9ea46f16dab8a97929e813ea6ef55183f8112c2ca",

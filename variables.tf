@@ -8,6 +8,7 @@ variable "proxmox_vms" {
     target_node    = optional(string)
     clone_override = optional(bool)
     full_clone     = optional(bool)
+    ostype         = optional(string)
     os             = optional(string)
     cores          = optional(number)
     sockets        = optional(number)
@@ -15,61 +16,59 @@ variable "proxmox_vms" {
     hotplug        = optional(string)
     scsihw         = optional(string)
     sshkeys        = optional(string)
-    network_configuration = list(object({
+    network_configuration = optional(list(object({
       model  = string
       bridge = string
-    }))
-    disk_configuration = list(object({
+    })))
+    disk_configuration = optional(list(object({
       type    = string
       storage = string
       size    = string
-    }))
+      slot    = string
+    })))
   }))
   default = []
 }
 
-## TODO: Remove default choices; require user to configure all options
-variable "proxmox_defaults" {
-  description = "Default Proxmox Configurations for Simplicity of Deployment"
+variable "proxmox_base_settings" {
+  description = "Base Proxmox VM Provisioning Settings; Can be used to set common settings across multiple VMs"
   type = object({
-    cores         = number
-    sockets       = number
-    memory        = number
-    hotplug       = string
     proxmox_clone = string
+    target_node   = string
     disk_configuration = list(object({
       type    = string
       storage = string
       size    = string
+      slot    = string
     }))
     network_configuration = list(object({
+      id     = number
       model  = string
       bridge = string
     }))
-    os          = string
-    target_node = string
+  })
+}
+
+## TODO: Remove default choices; require user to configure all options
+variable "proxmox_defaults" {
+  description = "Core Default Proxmox Configurations for Simplicity of Deployment"
+  type = object({
+    cores   = number
+    sockets = number
+    memory  = number
+    hotplug = string
+    ostype  = string
+    os      = string
+    bios    = string
   })
   default = {
-    cores         = 1
-    sockets       = 1
-    memory        = 2048
-    hotplug       = "network,disk,cpu,memory"
-    proxmox_clone = "debian-12-infra-compute-template"
-    disk_configuration = [
-      {
-        type    = "virtio"
-        storage = "local-btrfs"
-        size    = "50G"
-      }
-    ]
-    network_configuration = [
-      {
-        model  = "virtio"
-        bridge = "vmbr0"
-      }
-    ]
-    os          = "debian"
-    target_node = "compute-1"
+    cores   = 2
+    sockets = 1
+    memory  = 2048
+    hotplug = "network,disk,cpu"
+    ostype  = "cloud-init"
+    os      = "ubuntu"
+    bios    = "SeaBIOS"
   }
 }
 
